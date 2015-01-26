@@ -175,24 +175,24 @@
     };
 
     var botCreator = "Joaozin";
-    var botCreatorIDs = [3820121];
+    var botCreatorIDs = [6666666];
 
     var basicBot = {
-        version: "6.9",
+        version: "6.6.6",
         status: false,
-        name: "CEB Chatbot",
+        name: "basicBot",
         loggedInID: null,
         scriptLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/basicBot.js",
         cmdLink: "https://github.com/JoaozinBraga/CEB-Chatbot/blob/master/commands.md",
-        chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/en.json",
+        chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/pt.json",
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
         retrieveFromStorage: retrieveFromStorage,
         settings: {
-            botName: "CEB Chatbot",
+            botName: "CEB-Chatbot",
             language: "portuguese",
-            chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/en.json",
+            chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/pt.json",
             maximumAfk: 60,
             afkRemoval: false,
             maximumDc: 30,
