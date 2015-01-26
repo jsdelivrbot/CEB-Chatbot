@@ -182,7 +182,7 @@
         status: false,
         name: "basicBot",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/B1G-B0SS//master/basicBot.js",
+        scriptLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/basicBot.js",
         cmdLink: "https://github.com/JoaozinBraga/CEB-Chatbot/blob/master/commands.md",
         chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/pt.json",
         chat: null,
