@@ -7,9 +7,9 @@ Uso
 
 Salve nos favoritos o codigo. Para rodar o bot, rode o favoritado.
 
-`javascript:(function(){$.getScript('https://rawgit.com/B1G-B0SS/Exercito-Bot/master/basicBot.js');})();`
+`javascript:(function(){$.getScript('https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/basicBot.js');})();`
 
-Se não funcionar, vá em https://raw.githubusercontent.com/B1G-B0SS/Exercito-Bot/master/basicBot.js Copie, e cole o conteudo completo no console (F12) dentro da sua sala do Plug.DJ.
+Se não funcionar, vá em https://raw.githubusercontent.com/JoaozinBraga/CEB-Chatbot/master/basicBot.js Copie, e cole o conteudo completo no console (F12) dentro da sua sala do Plug.DJ.
 
 ###Comandos###
 
