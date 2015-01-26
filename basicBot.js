@@ -178,21 +178,21 @@
     var botCreatorIDs = [6666666];
 
     var basicBot = {
-        version: "6.6.6",
+        version: "6.9",
         status: false,
         name: "basicBot",
         loggedInID: null,
         scriptLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/basicBot.js",
         cmdLink: "https://github.com/JoaozinBraga/CEB-Chatbot/blob/master/commands.md",
-        chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/pt.json",
+        chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/en.json",
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
         retrieveFromStorage: retrieveFromStorage,
         settings: {
             botName: "CEB Chatbot",
-            language: "portuguese",
-            chatLink: "hhttps://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/pt.json",
+            language: "english",
+            chatLink: "hhttps://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/en.json",
             maximumAfk: 60,
             afkRemoval: false,
             maximumDc: 30,
