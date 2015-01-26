@@ -239,8 +239,8 @@
             songstats: true,
             commandLiteral: "!",
             blacklists: {
-                NSFW: "https://rawgit.com/JoaozinBraga/basicBot-customization/master/blacklists/NSFWlist.json",
-                OP: "https://rawgit.com/JoaozinBraga/basicBot-customization/master/blacklists/OPlist.json"
+                NSFW: "https://rawgit.com/JoaozinBraga/basicBot-customization/master/blacklists/ExampleNSFWlist.json",
+                OP: "https://rawgit.com/JoaozinBraga/basicBot-customization/master/blacklists/ExampleOPlist.json"
             }
         },
         room: {
