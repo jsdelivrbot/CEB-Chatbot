@@ -1,0 +1,1218 @@
+$.getScript('https://dl.dropboxusercontent.com/s/zm9bf7qkrpepak6/AFK%20%20Message%20Responder.js');
+ 
+var ceBot = {};
+var ruleSkip = {};
+ceBot.misc = {};
+ceBot.settings = {};
+ceBot.moderators = {};
+ceBot.filters = {};
+botMethods = {};
+ceBot.pubVars = {};
+ 
+toSave = {};
+toSave.settings = ceBot.settings;
+toSave.moderators = ceBot.moderators;
+toSave.ruleSkip = ruleSkip;
+ 
+ceBot.misc.Regras = "http://goo.gl/c6cPfv";
+ceBot.misc.Comandos = " Para ter acesso aos comandos, clique neste link: "
+ceBot.misc.Temas = " http://goo.gl/ksx7ba";
+ceBot.misc.ajuda = " Comando Nсo Editado!"
+ceBot.misc.staff = "";
+ceBot.misc.autowoot = " Precisa de autowoot? Recomendamos o OrigemWoot: http://origemwoot.weebly.com/ Autowoot Completo para plug.dj sempre atualizado e com funушes inovadoras! Experimente!";
+ceBot.misc.Parceria = "";
+ceBot.misc.clearman = " Chat 100% Livre de Caspa :trollface:"
+ceBot.misc.evento = " ";
+ceBot.misc.versсo = "3.9.5";
+ceBot.misc.origem = " Desenvolvido By: Igorce9";
+ceBot.misc.editado = "Editado pela Щltima vez em: 26/01/2015-13:40";
+ceBot.misc.ready = true;
+ceBot.misc.lockSkipping = true;
+ceBot.misc.lockSkipped = "0";
+ceBot.misc.tacos = new Array();
+ 
+joined = new Date().getTime();
+ 
+cancel = false;
+ 
+ceBot.filters.strobeWords = new Array();
+ceBot.filters.commandWords = new Array();
+ 
+ceBot.settings.maxLength = 5; //minutes
+ceBot.settings.cooldown = 10; //seconds
+ceBot.settings.staffMeansAccess = true;
+ceBot.settings.historyFilter = false;
+ceBot.settings.welcome = true;
+ceBot.settings.songStats = false;
+ceBot.settings.strobeFilter = false;
+ceBot.settings.commandFilter = false;
+ceBot.settings.interactive = true;
+ceBot.settings.ruleSkip = true;
+ceBot.settings.removedFilter = true;
+ 
+//                       [Igorce9]                 
+ceBot.admins = ["3455675"];
+ 
+ 
+ceBot.filters.strobeWords = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0"];
+ 
+ceBot.filters.commandWords = ["!songstats","!autowoot","!img","!dc","!history","!welcome","!clearwaitlist","!kick","!ban","!lockskip","!staff","!page","!parceria","!comando","!comandos","!regras","!leia","!trava","!destrava","!skip","!tpula","!limpar","!temas","!clearchat","!aviso","!equipe","!ping","!versсo","!origem","!ajuda","!status","!editado","!musica","!plugdj","!usercomando","!emoticons","!taco","!cookies","!punir","!checarbanido","!add listadebanidos","!add banidos","!fpf","!fph","!fpp","!fpr","!fb","!evento","!legal","!chato","!fpc","!rfpc","!rfpp","!rfpf","!rfpr","!rapocalypse","!apocalypse","!clearman","!join","!leave","!roleta","!stoproleta","!eta","!pontos","!djinfo","!bouncer","!resident","!add","!remove"];
+ 
+ceBot.misc.tacos = ["taco crocante","taco mexicano","taco vegetariano","taco apimentado","taco de queijo","taco delicioso"];
+ 
+ceBot.pubVars.skipOnExceed;
+ceBot.pubVars.command = false;
+ 
+Array.prototype.remove=function(){var c,f=arguments,d=f.length,e;while(d&&this.length){c=f[--d];while((e=this.indexOf(c))!==-1){this.splice(e,1)}}return this};
+ 
+API.on(API.DJ_ADVANCE, djAdvanceEvent);
+ 
+function djAdvanceEvent(data){
+    setTimeout(function(){ botMethods.djAdvanceEvent(data); }, 500);
+}
+ 
+ 
+botMethods.skip = function(){
+    setTimeout(function(){
+        if(!cancel) API.moderateForceSkip();
+    }, 3500);
+};
+ 
+botMethods.lookupUserName = function(name){
+    for(var i in API.getUsers()) {
+        if (API.getUsers()[i].username === name.trim()) return API.getUsers()[i].id;
+    }  
+};
+ 
+botMethods.changeDJCycle = function(){
+     setTimeout(function(){
+var toggle = $(".cycle-toggle");
+                        if(toggle.hasClass("disabled")) 
+                            toggle.click();    
+                        if(toggle.hasClass("enabled")) toggle.click();
+               }, 1000);
+        };
+ 
+botMethods.moveUser = function(id, pos, priority){
+      var user = botMethods.lookupUser(id);
+      var wlist = API.getWaitList();
+      if(API.getWaitListPosition(id) === -1){
+          if (wlist.length < 50){
+      if (pos !== 0) setTimeout(function(id, pos){ 
+                            API.moderateMoveDJ(id, pos);     
+                        },1250, id, pos);
+                    }  
+                }                   
+            };            
+ 
+botMethods.load = function(){
+    toSave = JSON.parse(localStorage.getItem("ceBotSave"));
+    ceBot.settings = toSave.settings;
+    ruleSkip = toSave.ruleSkip;
+};        
+ 
+botMethods.save = function(){localStorage.setItem("ceBotSave", JSON.stringify(toSave))};
+ 
+botMethods.loadStorage = function(){
+    if(localStorage.getItem("ceBotSave") !== null){
+        botMethods.load();
+    }else{
+        botMethods.save();
+    }
+};
+ 
+botMethods.checkHistory = function(){
+    currentlyPlaying = API.getMedia(), history = API.getHistory();
+    caught = 0;
+    for(var i = 0; i < history.length; i++){
+        if(currentlyPlaying.cid === history[i].media.cid){
+            caught++;
+        }
+    }
+    caught--;
+    return caught;
+};
+ 
+botMethods.lookupUser = function(id){
+for(var i in API.getUsers()) {
+        if (API.getUsers()[i].id === id);
+    }
+};
+ 
+botMethods.getID = function(username){
+    var users = API.getUsers();
+    var result = "";
+    for(var i = 0; i < users.length; i++){
+        if(users[i].username === username){
+            result = users[i].id;
+            return result;
+        }
+    }
+ 
+    return "notFound";
+};
+ 
+botMethods.cleanString = function(string){
+    return string.replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&#34;/g, "\"").replace(/&#59;/g, ";").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+};
+ 
+ceBot.roleta = {
+                roletaStatus: false,
+                participants: [],
+                countdown : null,
+                startroleta: function(){
+                    ceBot.roleta.roletaStatus = true;
+                    ceBot.roleta.countdown = setTimeout(function(){ ceBot.roleta.endroleta(); }, 60 * 1000);
+                    API.sendChat("/em A roleta foi iniciada! Digite !join para participar!");
+                },
+                endroleta: function(){
+                    ceBot.roleta.roletaStatus = false;
+                    var ind = Math.floor(Math.random() * ceBot.roleta.participants.length);
+                    var winner = ceBot.roleta.participants[ind];
+                    ceBot.roleta.participants = [];
+                    var pos = 1;
+                    var user = API.getUser(winner);
+                    var name = user.username;
+                    API.sendChat("/em A roleta acabou e um vencedor foi escolhido! " + name);
+                    setTimeout(function(winner){
+                        API.moderateMoveDJ(winner, pos, false);
+                    }, 1*1000, winner, pos);
+ 
+     },
+}
+ 
+botMethods.djAdvanceEvent = function(data){
+    clearTimeout(ceBot.pubVars.skipOnExceed);
+    if(ceBot.misc.lockSkipping){
+        API.moderateAddDJ(ceBot.misc.lockSkipped);
+        ceBot.misc.lockSkipped = "0";
+        ceBot.misc.lockSkipping = true;
+        setTimeout(function(){ API.moderateRoomProps(false, true); }, 500);
+    }
+    var song = API.getMedia();
+    if(botMethods.checkHistory() > 0 && ceBot.settings.historyFilter){
+        if(API.getUser().permission < 2){
+            API.sendChat("Essa mЩsica estр na histзria, moderadores podem pular!");
+        }else if(API.getUser().permission > 1){
+            API.sendChat("@" + API.getDJs()[0].username + ", tocar mЩsicas que jр estсo na histзria nсo ж permitido! Pulando..");
+            botMethods.skip()
+        }else if(song.duration > ceBot.settings.maxLength * 60){
+            ceBot.pubVars.skipOnExceed = setTimeout( function(){
+                API.sendChat("@"+API.getDJs()[0].username+" VocЖ jр tocou tempo suficiente, agora ж hora de deixar outro na cabine!");
+                botMethods.skip();
+            }, ceBot.settings.maxLength * 60000);
+            //API.sendChat("@"+API.getDJs()[0].username+" Estр mЩsica serр pulada " + ceBot.settings.maxLength + " estр excedendo o limite permitido.");
+        }else{
+            setTimeout(function(){
+                if(botMethods.checkHistory() > 0 && ceBot.settings.historyFilter){
+                    API.sendChat("@" + API.getDJs()[0].username + ", tocar mЩsicas que jр estсo na histзria nсo ж permitido! Por favor toma mais cuidado na prзxima. Pulando..");
+                    botMethods.skip()
+                };
+            }, 1500);
+        }
+    }
+};
+ 
+API.moderateDeleteChat = function (cid){
+                $.ajax({
+                    url: "https://plug.dj/_/chat/" + cid,
+                    type: "DELETE"
+                })
+};
+ 
+API.on(API.ADVANCE,function(data){
+        var hist = API.getHistory();
+        var dj = API.getDJ();
+        var id = dj.id;
+        var name = dj.username;
+        var pos = 1;
+        for (var i in hist) {
+                if (hist[i].media.id == data.media.id) {
+                        botMethods.historySkip();
+                        API.sendChat("@" + name + " Sua musica estр no historico!");
+                        break;
+                }
+        }
+});
+ 
+API.on(API.USER_JOIN, ban);
+function ban(user){
+var usersBanned = [""];
+if(user.id == usersBanned){
+API.sendChat("@" + user.username + " UserBlackList Detected!");
+var userID = [""];
+setTimeout(function(){
+API.moderateBanUser(userID, 0, API.BAN.PERMA);
+},1000);
+}
+}
+ 
+API.on(API.USER_JOIN, callback);
+ 
+function callback(user) {
+if(ceBot.settings.welcome === true){
+setTimeout (function(){
+  API.sendChat("Bem Vindo " + "@" + user.username + " A sala Trap, Electro & Dubstep.");
+}, 1000);
+}
+}
+ 
+API.on(API.ADVANCE, scoreUpdate);
+function scoreUpdate(obj){
+if(ceBot.settings.songStats === true){
+var woots = obj.lastPlay.score.positive;
+var mehs = obj.lastPlay.score.negative;
+var grab = obj.lastPlay.score.grab;
+ 
+API.sendChat("/em " + API.getMedia().author + " - " + API.getMedia().title + " :+1: " + woots + ", :-1: " + mehs + ", :star: " + grab + ".");
+}
+}  
+ 
+function SecondsToHMS(d)
+{
+     d = Number(d);
+     var h = Math.floor(d / 3600);
+     var m = Math.floor(d % 3600 / 60);
+     var s = Math.floor(d % 3600 % 60);
+     return ((h > 0 ? (h >= 10 ? h : '0' + h): '00') + ':' + (m > 0 ? (m >= 10 ? m : '0' + m): '00') + ':' + (s > 0 ? (s >= 10 ? s : '0' + s): '00')  );
+}
+ 
+    API.on(API.CHAT, function(data){
+        if(data.message.indexOf('!') === 0){
+           API.moderateDeleteChat(data.cid);
+            var msg = data.message, from = data.from, fromID = data.fromID;
+            var command = msg.substring(1).split(' ');
+            if(typeof command[2] != "undefined"){
+                for(var i = 2; i<command.length; i++){
+                    command[1] = command[1] + ' ' + command[i];
+                }
+            }
+            if(ceBot.misc.ready || ceBot.admins.indexOf(fromID) > -1 || API.getUser(data.fromID).permission > 1){
+                switch(command[0].toLowerCase()){
+                    case "ping":
+                        API.sendChat("/em " + "[" + data.un + "]" + " pong!");
+                        if(ceBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        break;
+                         
+                     
+                    case "aviso":
+                        if(API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("/em " + "[" + data.un + "]" + " Chegue as Listas OP/BlackList: http://goo.gl/eclL1i");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+" Chegue as Listas OP/BlackList: http://goo.gl/eclL1i");
+                        }else{
+                            API.sendChat("");
+                        }
+                        if(ceBot.admins.indexOf(data.uid) == -1 || API.getUser(data.uid).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        }
+                        break;
+                         
+                    case "usercomandos":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat("");
+                        }else{
+                            API.sendChat("");
+                        }
+                        if(ceBot.admins.indexOf(data.uid) == -1 || API.getUser(data.uid).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        break;
+                         
+                    case "fb":
+                        if(API.hasPermission(data.uid, API.ROLE.DJ)){
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("/em " + "[" + data.un + "]" + " Participe do nosso grupo no Facebook: http://goo.gl/LELz1R");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+" Participe do nosso grupo no Facebook: http://goo.gl/LELz1R");
+                        }else{
+                            API.sendChat("");
+                        }
+                        if(ceBot.admins.indexOf(data.uid) == -1 || API.getUser(data.uid).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        }
+                        break;
+ 
+                    case "page":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("/em " + "[" + data.un + "]" + " Curta nossa pagina no Facebook: ");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+" Curta nossa pagina do Facebook: ");
+                        }else{
+                            API.sendChat("");
+                        }
+                        if(ceBot.admins.indexOf(data.uid) == -1 || API.getUser(data.uid).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        break; 
+                         
+                        case "site":
+                        if(API.hasPermission(data.uid, API.ROLE.DJ)){
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("/em " + "[" + data.un + "]" + " Visite nosso site: ");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+" Visite nosso site: ");
+                        }else{
+                            API.sendChat("");
+                        }
+                        if(ceBot.admins.indexOf(data.uid) == -1 || API.getUser(data.uid).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        }
+                        break;   
+ 
+                    case "emoticons":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("/em " + "[" + data.un + "]" + " Veja e lista de emoticons disponьveis no Chat: http://www.emoji-cheat-sheet.com/");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+" Sem mensagem para isso");
+                        }else{
+                            API.sendChat("");
+                        }
+                        if(ceBot.admins.indexOf(data.uid) == -1 || API.getUser(data.uid).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        break;
+ 
+                    case "plugdj":
+                        if(typeof command[1] == "undefined"){
+                            API.sendChat("/em " + "[" + data.un + "]" + " Conheуa o Blog do Plug.dj: http://blog.plug.dj/");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+" Conheуa o Blog do Plug.dj: http://blog.plug.dj/");
+                        }else{
+                            API.sendChat("Conheуa o Blog do Plug.dj: http://blog.plug.dj/");
+                        }
+                        if(ceBot.admins.indexOf(data.uid) == -1 || API.getUser(data.uid).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        break;
+ 
+                    case "link":
+                        if(API.hasPermission(data.uid, API.ROLE.DJ)){
+                        if(API.getMedia().format == 1){
+                            API.sendChat("/em http://youtu.be/" + API.getMedia().cid);
+                        }else{
+                            var id = API.getMedia().cid;
+                            SC.get('/tracks', { ids: id,}, function(tracks) {
+                                API.sendChat(tracks[0].permalink_url);
+                            });
+                        }
+                        if(ceBot.admins.indexOf(data.uid) == -1 || API.getUser(data.uid).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        }
+                        break;
+ 
+                }
+            }
+        }
+    });
+ 
+users = {}
+getUserByName = function(name) {
+    for(var i in API.getUsers()) {
+        if (API.getUsers()[i].username === name.trim()) return API.getUsers()[i].id;
+    }
+}
+dcLookup = function(id) {
+        if(typeof users[id] !== 'undefined') API.sendChat(API.getUser(id).username + ' desconectou - se ' + Math.round((Date.now() - users[id].time) / 60000) + ' minutos atrрs na posiусo ' + (users[id].index + 1));
+        else API.sendChat('eu nсo vi este usuario se desconectar!');
+}
+API.on(API.USER_LEAVE, function(data){
+        users[data.id] = { id: data.id, index: data.wlIndex, time: Date.now() }
+})
+API.on(API.CHAT, function(data){
+        if (data.message.indexOf('!dc') === 0 && API.getUser(uid).permission > 1) dcLookup(getUserByName(data.message.substring(11)));
+})
+ 
+     
+    API.on(API.CHAT, function(data){
+        if(data.message.indexOf('!') === 0){
+            API.moderateDeleteChat(data.cid);
+            var msg = data.message, from = data.from, fromID = data.fromID;
+            var command = msg.substring(1).split(' ');
+            if(typeof command[2] != "undefined"){
+                for(var i = 2; i<command.length; i++){
+                    command[1] = command[1] + ' ' + command[i];
+                }
+            }
+            if(ceBot.misc.ready || ceBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+                switch(command[0].toLowerCase()){
+                    /* commented out because the bot isn't running on a dedicated bot account
+                     case "chato":
+                     if(API.getUser(data.uid).permission > 2){
+                     }
+                     break;
+ 
+                     case "legal":
+                     if(API.getUser(data.uid).permission > 2){
+                     }
+                     break;*/
+ 
+                    case "skip":
+                        if(API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                        if(typeof command[1] === "undefined"){
+                            API.moderateForceSkip();
+                            API.sendChat("/em" + "[" + data.un + "]" + " Usou skip");
+                        }else{
+                            API.sendChat('@'+API.getDJs()[0].username+' '+command[1]);
+                            API.moderateForceSkip();
+                        }
+                    }
+ 
+                    case 'cancel':
+                        cancel = true;
+                        API.sendChat('');
+                        break;
+ 
+                    case 'rfpv':
+                    case 'removerfiltro':
+                        if(API.getUser(fromID).permission > 1 || ceBot.admins.indexOf(fromID) > -1) ceBot.settings.removedFilter ? API.sendChat("Filtro de remover ativado") : API.sendChat("Filtro de remover desativado");
+                        break;
+                    case 'rfpv2':
+                    case 'removerfiltro2':
+                        ceBot.settings.removedFilter = !ceBot.settings.removedFilter;
+                        if(API.getUser(fromID).permission > 1 || ceBot.admins.indexOf(fromID) > -1) ceBot.settings.removedFilter ? API.sendChat("Filtro de remover vьdeo ativado") : API.sendChat("Filtro de remover desativado");
+                        break;
+        
+                    case "filtroapocalypse":
+                    case "rapocalypse":
+                        if(API.getUser(fromID).permission > 1 || ceBot.admins.indexOf(fromID) > -1) ceBot.settings.strobeFilter ? API.sendChat("Apocalypse Ativo") : API.sendChat("Apocalypse Desativado");
+                        botMethods.save();
+                        break;
+ 
+                    case "filtrocomandos":
+                    case "rfpc":
+                        if(API.getUser(fromID).permission > 1 || ceBot.admins.indexOf(fromID) > -1) ceBot.settings.commandFilter ? API.sendChat("Filtro de comandos ativado") : API.sendChat("Filtro de comandos desativado");
+                        botMethods.save();
+                        break;
+ 
+                     case "apocalypse":
+                         if(API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                             if(ceBot.settings.strobeFilter){
+                                 ceBot.settings.strobeFilter = false;
+                                 API.sendChat("/em " + "[" + data.un + "]" + " Deu O Fim Ao Apocalypse.");
+                             }else{
+                                 ceBot.settings.strobeFilter = true;
+                                 API.sendChat("/em " + "[" + data.un + "]" + " Deu Inicio Ao Apocalypse.");
+                             }
+                         }
+                         botMethods.save();
+                         break;
+ 
+                    case "fpc":
+                        if(API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                            if(ceBot.settings.commandFilter){
+                                ceBot.settings.commandFilter = false;
+                                API.sendChat("ceBot nсo irр mais filtrar comandos.");
+                            }else{
+                                ceBot.settings.commandFilter = true;
+                                API.sendChat("ceBot estр filtrando comandos agora.");
+                            }
+                        }
+                        botMethods.save();
+                        break;
+ 
+                    case "welcome":
+                        if(API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                            if(ceBot.settings.welcome){
+                                ceBot.settings.welcome = false;
+                                    API.sendChat("/em " + "[" + data.un + "]" + " Welcome Message OFF.");
+                            }else{ 
+                                ceBot.settings.welcome = true;
+                                    API.sendChat("/em " + "[" + data.un + "]" + " Welcome Message ON.");
+                            }
+                        }
+                        botMethods.save();
+                        break;      
+ 
+                    case "songstats":
+                        if(API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                            if(ceBot.settings.songStats){
+                                ceBot.settings.songStats = false;
+                                    API.sendChat("/em " + "[" + data.un + "]" + " Song Stats OFF.");
+                            }else{ 
+                                ceBot.settings.songStats = true;
+                                    API.sendChat("/em " + "[" + data.un + "]" + " Song Stats ON.");
+                            }
+                        }
+                        botMethods.save();
+                        break;      
+ 
+                    case "regras":
+                        API.sendChat("/em " + "[" + data.un + "]" + " Regras: " +  ceBot.misc.Regras);
+                    break
+ 
+                    case "staff":
+                        API.sendChat("/em " + "[" + data.un + "]" + " Faуa Parte da staff basta preencher o Formulario de inscriусo: " +  ceBot.misc.staff);
+                    break
+ 
+                    case "autowoot":
+                        API.sendChat("/em " + "[" + data.un + "]" +  ceBot.misc.autowoot);
+                    break
+ 
+                    case "parceria":
+                        API.sendChat("/em " + "[" + data.un + "]" + " Curta a pagina das nossas Parcerias: " +  ceBot.misc.Parceria);
+                    break
+                     
+                    case "temas":
+                    case "tema":
+                        if(API.hasPermission(data.uid, API.ROLE.DJ)){
+                        API.sendChat("/em " + "[" + data.un + "]" + " Temas: " + ceBot.misc.Temas);
+                    }
+                    break;
+                     
+                    case "ajuda":
+                        API.sendChat("/em " + "[" + data.un + "]" + ceBot.misc.ajuda);
+                    break
+ 
+                    case "clearman":
+                        API.sendChat("/em " + "[" + data.un + "]" + ceBot.misc.clearman);
+                    break
+                     
+                    case "evento":
+                        if(API.hasPermission(data.uid, API.ROLE.DJ)){
+                        API.sendChat("/em " + "[" + data.un + "]" + ceBot.misc.evento);
+                    }
+                    break;
+                           
+                    case "comandos":
+                    case "comando":
+                        API.sendChat("/em " + "[" + data.un + "]" + ceBot.misc.Comandos);
+                    break
+                     
+                    case "versсo":
+                        API.sendChat("/em " + "[" + data.un + "]" + " TEDBOT versсo " + ceBot.misc.versсo);
+                        if(ceBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        break; 
+        
+                    case "destrava":
+                        if(API.hasPermission(data.uid, API.ROLE.MANAGER)){
+                          if(typeof command[1] === "undefined"){
+                            API.moderateLockWaitList(false);
+                          }
+                        }
+                        break;                  
+                     
+                    case "cycle":
+                        if(API.hasPermission(data.uid, API.ROLE.MANAGER)){
+                        var toggle = $(".cycle-toggle");
+                        if(toggle.hasClass("disabled")) 
+                            toggle.click();    
+                        if(toggle.hasClass("enabled")) toggle.click();
+                    }
+                    break;
+ 
+                    case "join":
+                          var lista = API.getWaitListPosition(data.uid);
+                          if(lista === -1){
+                          API.sendChat("@"+ data.un +" entre na lista para poder participar da roleta!");
+                          }else{
+                          if(ceBot.roleta.roletaStatus){
+                          ceBot.roleta.participants.push(data.uid);
+                          API.chatLog("[" + data.un + "]" + " Entrou na roleta!");
+                          }
+                          }
+                          break; 
+ 
+                    case "leave":
+                          var ind = ceBotBot.roleta.participants.indexOf(data.uid);
+                          if(ind > -1){
+                          ceBot.roleta.participants.splice(ind, 1);
+                          API.sendChat("@" + data.un + " saiu da roleta!");
+                          }
+                          break;  
+ 
+                    case "roleta":
+                        if(API.hasPermission(data.uid, API.ROLE.MANAGER)){
+                          if(!ceBot.roleta.roletaStatus){
+                          ceBot.roleta.startroleta();
+                          }
+                          }
+                          break;
+ 
+                    case "stoproleta":
+                        if(API.hasPermission(data.uid, API.ROLE.MANAGER)){
+                          if(ceBot.roleta.roletaStatus === true){
+                          API.sendChat("/em A roleta foi parada");
+                          ceBot.roleta.roletaStatus = false;
+                          clearTimeout(ceBot.roleta.countdown);
+                          }
+                          }
+                          break;
+ 
+                    case "eta":
+                        if(API.hasPermission(data.uid, API.ROLE.NONE)){
+                           var rem = API.getTimeRemaining();
+                var wlPos = API.getWaitListPosition(data.uid);
+                var tempoRes;  
+                if( wlPos === -1 )
+                {
+                tempoRes = (210*(wlPos+1)) + rem;
+               API.sendChat('@' + data.un + ' Desculpe vocЖ estр tocando, ou nсo estр na lista.');
+                }
+                else
+                {
+                tempoRes = (210*wlPos)+rem;
+    
+                if(tempoRes < "5")
+                {
+                }
+                else{
+                API.sendChat("/em " + "[" + data.un + "]" + " ETA is " + SecondsToHMS(tempoRes));
+                }
+                }
+                    }
+                    break;
+ 
+                    case "lockskip":
+                        if(API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                          var dj = API.getDJ();
+                          var id = dj.id;
+                          var pos = 1;     
+                           
+                          API.sendChat("/em " + "[" + data.un + "]" + " Usou Lockskip");
+                          botMethods.changeDJCycle();
+                          setTimeout(function(id){
+                          API.moderateForceSkip();
+                          },1500, id); 
+                          setTimeout(function(id, pos){        
+                          botMethods.moveUser(id, pos, false);
+                          },1000, id, pos);    
+                          setTimeout(function(id){          
+                          botMethods.changeDJCycle();
+                          },1500, id);
+                          }
+                          break;
+                     
+                    case "clearwaitlist":
+                        if(API.hasPermission(data.uid, API.ROLE.MANAGER)){
+                        API.moderateLockWaitList(true, true);
+                        setTimeout(function(){
+                        API.moderateLockWaitList(false);
+                        },1500)
+                        }
+                        break;                       
+                                          
+                    case "trava":
+                         if(API.hasPermission(data.uid, API.ROLE.MANAGER)){
+                          if(typeof command[1] === "undefined"){
+                            API.moderateLockWaitList(true);
+                          }
+                        }
+                        break; 
+ 
+                    case "clearchat":
+                        if(API.hasPermission(data.uid, API.ROLE.MANAGER)){
+                       var currentchat = $('#chat-messages').children();
+                        for (var i = 0; i < currentchat.length; i++) {
+                            API.moderateDeleteChat(currentchat[i].getAttribute("data-cid"));
+                            }
+                          setTimeout(function(){
+                            API.sendChat("/em " + "[" + data.un + "]" + " Limpou o chat");
+                            },1500);
+                        }
+          break;
+                    break;
+ 
+                    case "origem":
+                    case "autor":
+                    case "criador":
+                        API.sendChat("/em " + "[" + data.un + "]" +  ceBot.misc.origem);
+                        if(ceBot.admins.indexOf(fromID) == -1 || API.getUser(data.uid).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        break;
+ 
+                    case "status":
+                        if(API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                            var response = "";
+                            var currentTime = new Date().getTime();
+                            var minutes = Math.floor((currentTime - joined) / 60000);
+                            var hours = 0;
+                            while(minutes > 60){
+                                minutes = minutes - 60;
+                                hours++;
+                                                     }
+   hours == 0 ? response = "/em " + "[" + data.un + "]" + " ceBot V3.9.5 Ativo por " + minutes + "m " : response = "/em " + "[" + data.un + "]" + " ceBot V3.9.5 Ativo por " + hours + "h " + minutes + "m";
+                            response = response + " | Welcome Message: "+ceBot.settings.welcome;
+                            response = response + " | Song Stats: "+ceBot.settings.songStats;
+                            API.sendChat(response);
+                        }
+                        break;
+ 
+                }
+            }
+        }
+    });
+ 
+    API.on(API.CHAT, function(data){
+        if(data.message.indexOf('!') === 0){
+            API.moderateDeleteChat(data.cid);
+            var msg = data.message, from = data.from, fromID = data.fromID;
+            var command = msg.substring(1).split(' ');
+            if(typeof command[2] != "undefined"){
+                for(var i = 2; i<command.length; i++){
+                    command[1] = command[1] + ' ' + command[i];
+                }
+            }
+            if(ceBot.misc.ready || ceBot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
+                switch(command[0].toLowerCase()){
+                    case "taco":
+                        {
+                        if(typeof command[1].indexOf("@") === 0){
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomTaco = Math.floor(Math.random() * ceBot.misc.tacos.length);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("@" + crowd[randomUser].username + ", pegue este " + ceBot.misc.tacos[randomTaco] + ", rрpido!");
+                                    break;
+                                case 1:
+                                    API.sendChat("@" + crowd[randomUser].username + ", coma este " + ceBot.misc.tacos[randomTaco] + " antes que eu o coma!");
+                                    break;
+                                case 2:
+                                    API.sendChat("um grрtis " + ceBot.misc.tacos[randomTaco] + " para vocЖ, @" + crowd[randomUser].username + ". :3");
+                                    break;
+                                case 3:
+                                    API.sendChat("coma este " + ceBot.misc.tacos[randomTaco] + " agora @" + crowd[randomUser].username + "!");
+                                    break;
+                                default:
+                                    API.sendChat('Que isso?');
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+                            var randomTaco = Math.floor(Math.random() * ceBot.misc.tacos.length);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("@" + botMethods.cleanString(command[1]) + ", pegue este " + ceBot.misc.tacos[randomTaco] + ", rрpido!");
+                                    break;
+                                case 1:
+                                    API.sendChat("@" + botMethods.cleanString(command[1]) + ", coma este " + ceBot.misc.tacos[randomTaco] + " antes que eu o coma!");
+                                    break;
+                                case 2:
+                                    API.sendChat(" Um grрtis " + ceBot.misc.tacos[randomTaco] + " para vocЖ, @" + botMethods.cleanString(command[1]) + ". :3");
+                                    break;
+                                case 3:
+                                    API.sendChat("coma este " + ceBot.misc.tacos[randomTaco] + " agora @" + botMethods.cleanString(command[1]) + "!");
+                                    break;
+                                default:
+                                    API.sendChat('Que isso?');
+                                      }
+                          break;
+                            }
+                        }
+                        if(ceBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        break;
+                    case "cookies":
+                        {
+                        if(typeof command[1].indexOf("@") === 0){
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomSentence = Math.floor(Math.random() * 4);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("");
+                                    setTimeout(function(){
+                                        API.sendChat(data.un + " deu um McLanche Feliz para @"+crowd[randomUser].username+" e veio um chaveiro de brinde!");
+                                    }, 650);
+                                    break;
+                                case 1:
+                                    API.sendChat(data.un + " presenteou @"+crowd[randomUser].username+" com uma garrafa de Cachaуa");
+                                    break;
+                                case 2:
+                                    API.sendChat(data.un + " Deu a  @"+crowd[randomUser].username+" um Vibrador Novinho!");
+                                    break;
+                                case 3:
+                                    API.sendChat(data.un + " deu uma vara de pescar para @"+crowd[randomUser].username+" deixa de preguiуa e va caуar a janta");
+                                    break;
+                                case 4:
+                                    API.sendChat(data.un + " fez um dom dom dom em @"+crowd[randomUser].username);
+                                    break;
+                                default:
+                                    API.sendChat('Ops, vocЖ fez algo errado?');
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomSentence = Math.floor(Math.random() * 4);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat(data.un + " deu um McLanche Feliz para @"+botMethods.cleanString(command[1])+" e veio um chaveiro de brinde!");
+                                    break;
+                                case 1:
+                                    API.sendChat(data.un + " presenteou @"+botMethods.cleanString(command[1])+" com uma garrafa de Cachaуa!");
+                                    break;
+                                case 2:
+                                    API.sendChat(data.un + " Deu a @"+botMethods.cleanString(command[1])+" um Vibrador Novinho!");
+                                    break;
+                                case 3:
+                                    API.sendChat(data.un + " deu uma vara de pescar para @"+botMethods.cleanString(command[1])+" deixa de preguiуa e va caуar a janta!");
+                                    break;
+                                case 4:
+                                    API.sendChat(data.un + " fez um dom dom dom em @"+botMethods.cleanString(command[1]));
+                                    break;
+                                default:
+                                    API.sendChat('Ops, vocЖ fez algo errado?');
+                        }
+                                    break;
+                            }
+                        }
+                        if(ceBot.admins.indexOf(data.uid) == -1 || API.getUser(fromID).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        break;
+                    case "punir":
+                        {
+                        if(typeof command[1].indexOf("@") === 0){
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomSentence = Math.floor(Math.random() * 6);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat(data.un + " bateu no @"+crowd[randomUser].username+" com um tijolo!");
+                                    break;
+                                case 1:
+                                    API.sendChat(data.un + " cortou os braуos de @"+crowd[randomUser].username+" Adeus Fap Fap");
+                                    break;
+                                case 2:
+                                    API.sendChat(data.un + " Matou @"+crowd[randomUser].username+" com uma pistola 9mm");
+                                    break;
+                                case 3:
+                                    API.sendChat(data.un + " colocou o cabelo de @"+crowd[randomUser].username+" no fogo!");
+                                    break;
+                                case 4:
+                                    API.sendChat(data.un + " furou @"+crowd[randomUser].username+" com uma caneta bic!");
+                                    break;
+                                case 5:
+                                    API.sendChat(data.un + " comeu os dedos de @"+crowd[randomUser].username+".");
+                                    break;
+                                case 6:
+                                    API.sendChat(data.un + " Deu uma dedada em @"+crowd[randomUser].username+" :trollface:");
+                                    break;
+                                default:
+                                    API.sendChat('Mas o que ж isso?');
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+                            var randomSentence = Math.floor(Math.random() * 6);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat(data.un + " bateu no @"+botMethods.cleanString(command[1])+" com um tijolo!");
+                                    break;
+                                case 1:
+                                    API.sendChat(data.un + " cortou os braуos de @"+botMethods.cleanString(command[1])+" Adeus Fap Fap");
+                                    break;
+                                case 2:
+                                    API.sendChat(data.un + " Matou @"+botMethods.cleanString(command[1])+" com uma pistola 9mm");
+                                    break;
+                                case 3:
+                                    API.sendChat(data.un + " colocou o cabelo do @"+botMethods.cleanString(command[1])+" no fogo!");
+                                    break;
+                                case 4:
+                                    API.sendChat(data.un + " furou @"+botMethods.cleanString(command[1])+" com uma caneta bic!");
+                                    break;
+                                case 5:F
+                                    API.sendChat(data.un + " comeu os dedos de @"+botMethods.cleanString(command[1])+".");
+                                    break;
+                                case 6:
+                                    API.sendChat(data.un + " Deu uma dedada em @"+botMethods.cleanString(command[1])+" :trollface:");
+                                    break;
+                                default:
+                                    API.sendChat('Mas o que ж isso?');
+                        }
+                                    break;
+                            }
+                        }
+                        if(ceBot.admins.indexOf(data.uid) == -1 || API.getUser(data.uid).permission < 2){
+                            ceBot.misc.ready = false;
+                            setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                        }
+                        break;
+ 
+                    case "editado":
+                        if(API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                            API.sendChat("/em " + "[" + data.un + "]" + " Versсo: " + ceBot.misc.versсo + " - " + ceBot.misc.editado)
+                        }
+                        break;
+ 
+                    case "equipe":
+                        if(API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                            API.sendChat("/em " + "[" + data.un + "]" + " Comando Nсo Editado.")
+                        }
+                        break;
+                }
+            }
+        }
+    });
+ 
+    API.on(API.CHAT, function(data){
+        if(data.message.indexOf('!leia') === 0){
+            var msg = data.message, from = data.from, fromID = data.fromID;
+            var command = msg.substring(1).split(' ');
+ 
+            if(ceBot.misc.ready || API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                switch(command[1]){
+                    case '1':
+                        API.sendChat('/em Comando Nсo Editado!');
+                        break;
+                    case '2':
+                        API.sendChat('/em Comando Nсo Editado!');
+                        break;
+                    case '3':
+                        API.sendChat('/em Comando Nсo Editado!');
+                        break;
+                    case '4':
+                        API.sendChat('/em Comando Nсo Editado!');
+                        break;
+                    case '5':
+                        API.sendChat('/em Comando Nсo Editado!');
+                        break;
+                    case '6':
+                        API.sendChat('/em Comando Nсo Editado!');
+                        break;
+                    case '7':
+                        API.sendChat('/em Comando Nсo Editado!');
+                        break;
+                    case '8':
+                        API.sendChat('/em Comando Nсo Editado!');
+                        break;
+                    default:
+                        API.sendChat('/em Comando Nсo Editado!');
+                        break;
+                }
+            }
+        }
+    });
+ 
+    API.on(API.CHAT, function(data){
+        if(data.message.indexOf('!lockskip') === 0){
+            var msg = data.message, from = data.from, fromID = data.fromID;
+            var command = msg.substring(1).split(' ');
+ 
+            if(ceBot.misc.ready || API.hasPermission(data.uid, API.ROLE.BOUNCER)){
+                switch(command[1]){
+                    case '+18':
+                        API.sendChat('@' + API.getDJ().username + ' Sua musica contem conteudo +18');
+                        break;
+                    case 'tema':
+                        API.sendChat('@' + API.getDJ().username + ' Sua musica nсo estр dentro dos temas permitidos na sala');
+                        break;
+                    case 'indisponivel':
+                        API.sendChat('@' + API.getDJ().username + ' Sua musica nсo toca ou estр indisponivel');
+                        break;
+                    case 'hist':
+                        API.sendChat('@' + API.getDJ().username + ' Sua musica estр no historico de musicas tocadas');
+                        break;
+                    default:
+                        API.sendChat('');
+                        break;
+                }
+            }
+        }
+    });
+ 
+    API.on(API.CHAT, function(data){
+        var msg = data.message, fromID = data.fromID;
+        command = msg.substring(1).split(' ');
+        if(typeof command[3] != "undefined"){
+            for(var i = 3; i<command.length; i++){
+                command[2] = command[2] + ' ' + command[i];
+            }
+        }
+        if(API.hasPermission(data.uid, API.ROLE.MANAGER)){
+            switch(command[0]){
+                case 'add':
+                    if(command[1].length === 13 && command[1].indexOf(':') === 1 && command[1].indexOf(1) === 0){
+                        ruleSkip[command[1]] = {id: command[1], rule: command[2]};
+                        $.getJSON("http://gdata.youtube.com/feeds/api/videos/"+command[1].substring(2)+"?v=2&alt=jsonc&callback=?", function(json){
+                            setTimeout(function(){
+                                if(typeof json.data.title !== 'undefined'){
+                                    API.sendChat(json.data.title+' listadebanidos!');
+                                }else{
+                                    API.sendChat('banidos!');
+                                }
+                            }, 500)
+                        });
+                    }else if(command[1].length === 10 && command[1].indexOf(':') === 1 && command[1].indexOf(2) === 0){
+                        ruleSkip[command[1]] = {id: command[1], rule: command[2]};
+                        SC.get('/tracks', {ids: command[1].substring(2)}, function(tracks) {
+                            if(typeof tracks[0].title !== 'undefined'){
+                                API.sendChat(tracks[0].title+' .Foi adicionado a lista de banidos! ');
+                            }else{
+                                API.sendChat('banidos!');
+                            }
+                        });
+                    }else if(typeof ruleSkip[API.getMedia().id] === 'undefined'){
+                    ruleSkip[API.getMedia().id] = {id: API.getMedia().id, rule: command[1]};
+                    API.sendChat(API.getMedia().author+ ' - ' +API.getMedia().title+' .Foi adicionado a lista de banidos!');
+                    API.moderateForceSkip();
+                }
+                    botMethods.save();
+                    break;
+                case 'checarbanido':
+                    if(typeof command[1] !== 'undefined'){
+                        if(typeof ruleSkip[command[1]] !== 'undefined') API.sendChat(command[1]+' estр na nossa lista de banidos!');
+                        else API.sendChat(command[1]+' nсo estр na nossa lista de banidos!');
+                    }else{
+                        if(typeof ruleSkip[API.getMedia().id] !== 'undefined') API.sendChat(API.getMedia().id+' estр na nossa lista de banidos!')
+                        else API.sendChat(API.getMedia().id+' nсo estр na nossa lista de banidos!');
+                    }
+                    break;
+                case 'deletarbanido':
+                    if(typeof command[1] !== 'undefined' && typeof ruleSkip[command[1]] !== 'undefined'){
+                        delete ruleSkip[command[1]];
+                        API.sendChat(command[1]+' removed from ruleskip');
+                    }else if(typeof command[1] === 'undefined' && typeof ruleSkip[API.getMedia().id] !== 'undefined'){
+                        delete ruleSkip[API.getMedia().id];
+                        API.sendChat(API.getMedia().id+' removido da lista de banidos!');
+                    }else if(typeof command[1] !== 'undefined'){
+                        API.sendChat(command[1]+' nсo estр na lista de banidos!');
+                    }else{
+                        API.sendChat(API.getMedia().id+' nсo estр na lista de banidos!');
+                    }
+                    botMethods.save()
+                break;
+            }
+        }
+    });
+ 
+    API.on(API.CHAT, function(data){
+        msg = data.message.toLowerCase();
+ 
+        for(var i = 0; i < ceBot.filters.strobeWords.length; i++){
+            if(msg.indexOf(ceBot.filters.strobeWords[i].toLowerCase()) > -1 && ceBot.settings.strobeFilter){
+                API.moderateDeleteChat(data.cid);
+            }
+        }
+ 
+        for(var i = 0; i < ceBot.filters.commandWords.length; i++){
+            if(msg.indexOf(ceBot.filters.commandWords[i].toLowerCase()) > -1 && ceBot.settings.commandFilter){
+                API.moderateDeleteChat(data.cid);
+            }
+        }       
+ 
+    });
+ 
+    API.on(API.CHAT, function(data){
+        msg = data.message.toLowerCase(), chatID = data.chatID, fromID = data.fromID;
+        if(ceBot.misc.ready || ceBot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
+            if(msg.indexOf(':eyeroll:') > -1){
+                API.sendChat('/me : г_г');
+                if(ceBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                    ceBot.misc.ready = false;
+                    setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                }
+            }
+            if(msg.indexOf(':notamused:') > -1){
+                API.sendChat('/me : ?_?');
+                if(ceBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                    ceBot.misc.ready = false;
+                    setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                }
+            }
+            if(msg.indexOf(':yuno:') > -1){
+                API.sendChat('/me : ?(????');
+                if(ceBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                    ceBot.misc.ready = false;
+                    setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                }
+            }
+        }
+ 
+    });
+ 
+    API.on(API.CHAT, function(data){
+        msg = data.message.toLowerCase(), chatID = data.chatID, fromID = data.fromID;
+        if(ceBot.misc.ready || ceBot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
+            if(msg.indexOf('huehue') > -1){
+                API.sendChat('');
+                if(ceBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                    ceBot.misc.ready = false;
+                    setTimeout(function(){ ceBot.misc.ready = true; }, ceBot.settings.cooldown * 1000);
+                }
+            }
+        }
+ 
+    });
+ 
+    API.on(API.ADVANCE, DJ_ADVANCE);
+    function DJ_ADVANCE(data){
+        if(ceBot.settings.ruleSkip && typeof ruleSkip[data.media.id] != "undefined"){
+            switch(ruleSkip[data.media.id].rule){
+                case '1':
+                    API.sendChat('@'+data.dj.username+' nсo toque esse tipo de mЩsica.');
+                    botMethods.skip();
+                    break;
+                case '2':
+                    API.sendChat('@'+data.dj.username+' essa mЩsica estр em nossa lista de banidos.');
+                    botMethods.skip();
+                    break;
+                default:
+                    API.sendChat('@'+data.dj.username+' '+ruleSkip[data.media.id].rule);
+                    botMethods.skip();
+                    break;
+            }
+        }
+        $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+data.media.cid+'?v=2&alt=jsonc&callback=?', function(json){response = json.data});
+        setTimeout(function(){
+            if(typeof response === 'undefined' && data.media.format != 2 && ceBot.settings.removedFilter){
+                API.sendChat('');
+                //botMethods.skip();
+            }
+        }, 1500);
+ 
+        cancel = false;
+    }
+ 
+ 
+    botMethods.loadStorage();
+    console.log("TEDBOT ON");
+ 
+    setTimeout(function(){
+        $.getScript('');
+    }, 1000);
+ 
+    setTimeout(function(){
+        SC.initialize({
+            client_id: 'eae62c8e7a30564e9831b9e43f1d484a'
+        });
+    }, 3000);
+     
+    API.on(API.CHAT,onChat); API.on(API.DJ_ADVANCE,onDjAdv); API.sendChat('/em ceBot V3.9.5 Ativo!'); var song; if (API.getDJs().length == 0) API.on(API.DJ_UPDATE,djUpdate); else song = API.getMedia().author + ' - ' + API.getMedia().title;
+ 
+function onChat(data) { if (API.hasPermission(data.fromID,API.ROLE.BOUNCER)) { var message = data.message.toLowerCase(); if (message.indexOf() == 0) API.moderateLockWaitList(); if (message.indexOf() == 0) API.moderateLockWaitList(); if (message.indexOf() == 0) API.moderateLockWaitList(); if (message.indexOf() == 0) API.moderateLockWaitList(); if (message.indexOf('.tpula') == 0) { API.moderateLockWaitList(true,false); setTimeout(function(){API.moderateForceSkip();},1500); setTimeout(function(){API.moderateRoomProps(false,true);},4000); } if (message.indexOf('!pula') == 0) API.moderateForceSkip(); if (message.indexOf('!rules') == 0) { API.sendChat(''); API.off(API.CHAT,onChat); API.off(API.DJ_ADVANCE,onDjAdv); } } }
+ 
+function onDjAdv(obj) { setTimeout(function(){document.getElementById("button-vote-positive").click();},1500); var songStr = song; var woots = obj.lastPlay.score.positive, mehs = obj.lastPlay.score.negative, curates = obj.lastPlay.score.curates; if (woots === 1) var ww = ' Legal :+1: '; else var ww = ' Legais :+1: '; if (mehs === 1) var mm = ' Chato :-1: '; else var mm = ' Chatos :-1: '; if (curates === 1) var cc = ' Add :purple_heart: ]'; else var cc = ' Adds :purple_heart: ]'; var scoreStr = ' [ ' + woots + ww + mehs + mm + curates + cc; API.sendChat(); song = API.getMedia().author + ' - ' + API.getMedia().title; }
+ 
+function djUpdate(djs) { song = API.getMedia().author + ' - ' + API.getMedia().title; API.off(API.DJ_UPDATE,djUpdate); }
