@@ -175,7 +175,7 @@
     };
 
     var botCreator = "Joaozin";
-    var botCreatorIDs = [6666666];
+    var botCreatorIDs = [666666];
 
     var basicBot = {
         version: "6.9",
