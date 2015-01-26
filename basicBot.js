@@ -54,7 +54,7 @@
     var loadChat = function (cb) {
         if (!cb) cb = function () {
         };
-        $.get("https://rawgit.com/B1G-B0SS/basicBot-1/master/lang/langIndex.json", function (json) {
+        $.get("https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/langIndex.json", function (json) {
             var link = basicBot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -190,7 +190,7 @@
         retrieveSettings: retrieveSettings,
         retrieveFromStorage: retrieveFromStorage,
         settings: {
-            botName: "CEB Chatbot by: Joaozin",
+            botName: "CEB Chatbot",
             language: "english",
             chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/en.json",
             maximumAfk: 60,
@@ -496,7 +496,7 @@
                         rankInt = 4;
                         break;
                     case "manager":
-                        rankInt = 3;
+                        rankInt = 4;
                         break;
                     case "bouncer":
                         rankInt = 2;
