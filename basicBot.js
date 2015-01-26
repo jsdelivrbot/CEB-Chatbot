@@ -496,7 +496,7 @@
                         rankInt = 4;
                         break;
                     case "manager":
-                        rankInt = 4;
+                        rankInt = 3;
                         break;
                     case "bouncer":
                         rankInt = 2;
