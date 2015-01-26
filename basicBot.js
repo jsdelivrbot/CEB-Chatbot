@@ -180,7 +180,7 @@
     var basicBot = {
         version: "6.9",
         status: false,
-        name: "basicBot",
+        name: "CEB Chatbot",
         loggedInID: null,
         scriptLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/basicBot.js",
         cmdLink: "https://github.com/JoaozinBraga/CEB-Chatbot/blob/master/commands.md",
