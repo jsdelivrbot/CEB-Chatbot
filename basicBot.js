@@ -191,7 +191,7 @@
         retrieveFromStorage: retrieveFromStorage,
         settings: {
             botName: "CEB Chatbot",
-            language: "english",
+            language: "portuguese",
             chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/en.json",
             maximumAfk: 60,
             afkRemoval: false,
