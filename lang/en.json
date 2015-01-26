@@ -4,7 +4,7 @@
     "datarestored": "Dados armazenados anteriormente recuperados com êxito.",
     "greyuser": "Apenas Seguranças ou superiores podem usar o chatbot.",
     "bouncer": "O chatbot não pode mover pessoas na fila de espera quando usado por um bouncer.",
-    "online": "/me %%BOTNAME%% v%%VERSION%% online!",
+    "online": "/me %%BOTNAME%% v%%VERSION%% Ativo!",
 
 
     "welcome": "Bem vindo(a) %%NAME%% seu gostosão",
@@ -16,7 +16,7 @@
 
 
     "isopen": "/me A roleta COMEÇOU CARALHO! Use !join para entrar nessa PORRA!",
-    "winnerpicked": "/me UM FILHO DA PUTA FOI ESCOLHIDO! @%%NAME%% ganhou a posição %%POSITION%% todos comam o cu dele.",
+    "winnerpicked": "/me Um FILHO DA PUTA foi escolhido! @%%NAME%% ganhou a posição %%POSITION%% todos comam o cu dele.",
 
 
     "alreadyadding": "/me Usuário já está sendo adicionado! Posição desejada alterada para %%POSITION%%.",
