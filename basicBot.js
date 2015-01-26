@@ -54,7 +54,7 @@
     var loadChat = function (cb) {
         if (!cb) cb = function () {
         };
-        $.get("https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/langIndex.json", function (json) {
+        $.get("https://rawgit.com/B1G-B0SS/basicBot-1/master/lang/langIndex.json", function (json) {
             var link = basicBot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -175,7 +175,7 @@
     };
 
     var botCreator = "Joaozin";
-    var botCreatorIDs = [666666];
+    var botCreatorIDs = [3820121];
 
     var basicBot = {
         version: "6.9",
@@ -224,14 +224,14 @@
             afkRankCheck: "ambassador",
             motdEnabled: false,
             motdInterval: 5,
-            motd: "O Joaozin é foda!",
+            motd: "Temporary Message of the Day",
             filterChat: true,
             etaRestriction: false,
             welcome: true,
-            opLink: "http://goo.gl/eclL1i ",
-            rulesLink: "http://goo.gl/c6cPfv ",
-            themeLink: "http://goo.gl/ksx7ba",
-            fbLink: "http://goo.gl/LELz1R",
+            opLink: null,
+            rulesLink: null,
+            themeLink: null,
+            fbLink: null,
             youtubeLink: null,
             website: null,
             intervalMessages: [],
@@ -239,8 +239,8 @@
             songstats: true,
             commandLiteral: "!",
             blacklists: {
-                NSFW: "https://rawgit.com/JoaozinBraga/basicBot-customization/master/blacklists/ExampleNSFWlist.json",
-                OP: "https://rawgit.com/JoaozinBraga/basicBot-customization/master/blacklists/ExampleOPlist.json"
+                NSFW: "https://rawgit.com/B1G-B0SS/basicBot-customization/master/blacklists/ExampleNSFWlist.json",
+                OP: "https://rawgit.com/B1G-B0SS/basicBot-customization/master/blacklists/ExampleOPlist.json"
             }
         },
         room: {
