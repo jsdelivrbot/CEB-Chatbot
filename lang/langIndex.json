@@ -1,5 +1,5 @@
 {
-    "english": "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/en.json",
-    "portuguese": "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/pt.json",
-    "french": "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/fr.json"
+    "english": "https://cdn.jsdelivr.net/gh/JoaozinBraga/CEB-Chatbot/lang/en.json",
+    "portuguese": "https://cdn.jsdelivr.net/gh/JoaozinBraga/CEB-Chatbot/lang/pt.json",
+    "french": "https://cdn.jsdelivr.net/gh/JoaozinBraga/CEB-Chatbot/lang/fr.json"
 }

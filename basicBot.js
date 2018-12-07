@@ -54,7 +54,7 @@
     var loadChat = function (cb) {
         if (!cb) cb = function () {
         };
-        $.get("https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/en.json", function (json) {
+        $.get("https://cdn.jsdelivr.net/gh/JoaozinBraga/CEB-Chatbot/lang/en.json", function (json) {
             var link = basicBot.chatLink;
             if (json !== null && typeof json !== "undefined") {
                 langIndex = json;
@@ -182,9 +182,9 @@
         status: false,
         name: "basicBot",
         loggedInID: null,
-        scriptLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/basicBot.js",
+        scriptLink: "https://cdn.jsdelivr.net/gh/JoaozinBraga/CEB-Chatbot/basicBot.js",
         cmdLink: "https://github.com/JoaozinBraga/CEB-Chatbot/blob/master/commands.md",
-        chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/en.json",
+        chatLink: "https://cdn.jsdelivr.net/gh/JoaozinBraga/CEB-Chatbot/lang/en.json",
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
@@ -192,7 +192,7 @@
         settings: {
             botName: "CEB Chatbot",
             language: "english",
-            chatLink: "https://rawgit.com/JoaozinBraga/CEB-Chatbot/master/lang/en.json",
+            chatLink: "https://cdn.jsdelivr.net/gh/JoaozinBraga/CEB-Chatbot/lang/en.json",
             maximumAfk: 60,
             afkRemoval: false,
             maximumDc: 30,
@@ -239,8 +239,8 @@
             songstats: true,
             commandLiteral: "!",
             blacklists: {
-                NSFW: "https://rawgit.com/B1G-B0SS/basicBot-customization/master/blacklists/ExampleNSFWlist.json",
-                OP: "https://rawgit.com/B1G-B0SS/basicBot-customization/master/blacklists/ExampleOPlist.json"
+                NSFW: "https://cdn.jsdelivr.net/gh/B1G-B0SS/basicBot-customization/blacklists/ExampleNSFWlist.json",
+                OP: "https://cdn.jsdelivr.net/gh/B1G-B0SS/basicBot-customization/blacklists/ExampleOPlist.json"
             }
         },
         room: {
